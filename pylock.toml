@@ -1,0 +1,24 @@
+lock-version = "1.0"
+created-by = "pip"
+
+[[packages]]
+name = "pipfile"
+version = "0.0.2"
+
+[packages.sdist]
+name = "pipfile-0.0.2.tar.gz"
+url = "https://files.pythonhosted.org/packages/3a/01/4486ea9606ef8467c39b0cf6ea414eb4de5467dcb4a97333cf11a371cfd2/pipfile-0.0.2.tar.gz"
+
+[packages.sdist.hashes]
+sha256 = "f7d9f15de8b660986557eb3cc5391aa1a16207ac41bc378d03f414762d36c984"
+
+[[packages]]
+name = "toml"
+version = "0.10.2"
+
+[[packages.wheels]]
+name = "toml-0.10.2-py2.py3-none-any.whl"
+url = "https://files.pythonhosted.org/packages/44/6f/7120676b6d73228c96e17f1f794d8ab046fc910d781c8d151120c3f1569e/toml-0.10.2-py2.py3-none-any.whl"
+
+[packages.wheels.hashes]
+sha256 = "806143ae5bfb6a3c6e736a764057db0e6a0e05e338b5630894a5f779cabb4f9b"
