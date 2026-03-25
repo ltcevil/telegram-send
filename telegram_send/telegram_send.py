@@ -4,8 +4,9 @@ import configparser
 import re
 import sys
 from copy import deepcopy
-from os import makedirs, remove
+from os import environ, makedirs, remove
 from os.path import dirname, exists, expanduser, join
+from platform import machine
 from random import randint
 from shutil import which
 from typing import NamedTuple, Union
@@ -26,6 +27,20 @@ except ImportError:
 
 
 global_config = "/etc/telegram-send.conf"
+
+
+def get_bot_api_base_url():
+    override = environ.get("TELEGRAM_SEND_BOT_API_BASE_URL")
+    if override:
+        return override
+
+    if sys.platform == "darwin":
+        return "http://11.11.11.100:8081/bot"
+
+    if sys.platform.startswith("linux") and machine().lower() in {"x86_64", "amd64"}:
+        return "http://172.168.238.1:8081/bot"
+
+    return "http://11.11.11.100:8081/bot"
 
 
 def main():
@@ -196,7 +211,7 @@ async def send(*,
     token = settings.token
     if chat_id is None:
         chat_id = settings.chat_id
-    bot = telegram.Bot(token, base_url="http://172.16.238.11:8081/bot")
+    bot = telegram.Bot(token, base_url=get_bot_api_base_url())
     # We let the user specify "text" as a parse mode to be more explicit about
     # the lack of formatting applied to the message, but "text" isn't a supported
     # parse_mode in python-telegram-bot. Instead, set the parse_mode to None
@@ -322,7 +337,7 @@ async def delete(message_ids, conf=None, timeout=30):
     settings = get_config_settings(conf)
     token = settings.token
     chat_id = settings.chat_id
-    bot = telegram.Bot(token, base_url="http://172.16.238.11:8081/bot")
+    bot = telegram.Bot(token, base_url=get_bot_api_base_url())
 
     if message_ids:
         for m in message_ids:
@@ -341,7 +356,7 @@ async def list_chats(conf):
         return
 
     token = settings.token
-    bot = telegram.Bot(token, base_url="http://172.16.238.11:8081/bot")
+    bot = telegram.Bot(token, base_url=get_bot_api_base_url())
     
     print("Fetching updates to discover chats...")
     print("Note: Only chats that have recently interacted with the bot will be listed.")
@@ -418,7 +433,7 @@ async def configure(conf, channel=False, group=False, fm_integration=False):
         token = input(markup(prompt, "magenta")).strip()
 
     try:
-        bot = telegram.Bot(token, base_url="http://telegram-bot-api:8081/bot")
+        bot = telegram.Bot(token, base_url=get_bot_api_base_url())
         bot_details = await bot.get_me()
         bot_name = bot_details.username
     except Exception as e:
@@ -594,4 +609,3 @@ def get_config_settings(conf=None) -> Settings:
 
 if __name__ == "__main__":
     main()
-
