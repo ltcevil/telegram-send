@@ -34,12 +34,6 @@ def get_bot_api_base_url():
     if override:
         return override
 
-    if sys.platform == "darwin":
-        return "http://11.11.11.100:8081/bot"
-
-    if sys.platform.startswith("linux") and machine().lower() in {"x86_64", "amd64"}:
-        return "http://172.168.238.1:8081/bot"
-
     return "http://11.11.11.100:8081/bot"
 
 
